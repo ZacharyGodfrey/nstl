@@ -38,6 +38,7 @@
       }
 
       header {
+        padding: 0.5rem 1rem;
         background: white;
       }
 
@@ -53,6 +54,19 @@
         padding: 4rem 1rem 2rem 1rem;
         color: var(--light);
         background: var(--dark);
+      }
+
+      hgroup {
+        margin: 1rem 0;
+      }
+
+      hgroup h1, hgroup h2, hgroup h3 {
+        margin: 0;
+        line-height: 1;
+      }
+
+      hgroup p {
+        margin: 0;
       }
 
       h1, h2, h3, p {
@@ -78,8 +92,14 @@
         border: 1px solid var(--dark);
       }
 
-      table {
+      figure {
+        margin: 1rem 0;
         width: 100%;
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 100%;
         background: white;
       }
 
@@ -92,132 +112,70 @@
         margin: 0 auto;
       }
 
+      .text-center { text-align: center; }
       .text-right { text-align: right; }
-
-      .card {
-        margin: 1rem 0;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        background: white;
-      }
-
-      .grid {
-        display: grid;
-        gap: 1rem;
-        justify-items: stretch; /* cell content X */
-        align-items: start; /* cell content Y */
-        justify-content: stretch; /* column spacing X */
-        align-content: start; /* row spacing Y */
-      }
-
-      .grid.items-x-center { justify-items: center; }
-      .grid.items-y-center { align-items: center; }
-
-      .grid.items-x-stretch { justify-items: stretch; }
-      .grid.items-y-stretch { align-items: stretch; }
-
-      .grid.columns-4 { grid-template-columns: repeat(4, 1fr); }
-
-      .grid:not(.stack) > * { margin: 0 !important; }
-
-      .grid.sub {
-        grid-template-columns: subgrid;
-        grid-column: 1 / -1;
-        justify-items: inherit;
-        align-items: inherit;
-        justify-content: inherit;
-        align-content: inherit;
-      }
-
-      /* Small Screens */
-      @media screen and (max-width: 800px) {
-        .grid.stack {
-          display: block;
-        }
-      }
-
-      /* Large Screens */
-      @media screen and (min-width: 801px) {
-        .grid > * {
-          margin: 0 !important;
-        }
-      }
     </style>
-    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
     <script>
-      let DATA = {
-        profiles: []
-      };
-
-      (async () => {
+      const getProfiles = async () => {
         const docId = '10m2s8m3kyIc2GPB87y9hhoVHTBqUsmZwiy0OxuyIGoQ';
         const sheetName = 'Leaderboard';
         const dataUrl = `https://sheets-api.netlify.app/${docId}/${sheetName}`;
         const { data: profiles } = await fetch(dataUrl).then((x) => x.json());
 
-        DATA.profiles.push(...profiles);
-      })();
+        return profiles;
+      };
     </script>
   </head>
-  <body>
+  <body x-data="{ profiles: [] }" x-init="profiles = await getProfiles()">
     <header>
       <div class="x-limit">
-        <p>Axe Champs</p>
-        <h1>Star League</h1>
+        <hgroup>
+          <p>Axe Champs</p>
+          <h1>Star League</h1>
+        </hgroup>
       </div>
     </header>
 
     <main>
-      <section x-data="DATA">
+      <section>
         <div class="x-limit">
           <h2>Leaderboard</h2>
 
-          <table>
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Win Percentage</th>
-                <th>Average Score</th>
-                <th>Matches Played</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template x-for="profile in profiles">
+          <figure>
+            <table class="text-center">
+              <thead>
                 <tr>
-                  <td x-text="profile.Rank"></td>
-                  <td x-text="profile.Name"></td>
-                  <td x-text="profile['Win Percentage']"></td>
-                  <td x-text="profile['Average Score']"></td>
-                  <td x-text="profile['Total Matches']"></td>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Win Percentage</th>
+                  <th>Average Score</th>
+                  <th>Matches Played</th>
                 </tr>
-              </template>
-            </tbody>
-          </table>
-
-          <div class="grid columns-4 items-y-center">
-            <template x-for="profile in profiles">
-              <div class="card grid sub">
-                <p>
-                  <span x-text="'#' + profile.Rank"></span>
-                  <br>
-                  <strong x-text="profile.Name"></strong>
-                </p>
-
-                <p x-text="profile['Win Percentage']"></p>
-                <p x-text="profile['Average Score']"></p>
-                <p x-text="profile['Total Matches']"></p>
-              </div>
-            </template>
-          </div>
+              </thead>
+              <tbody>
+                <template x-for="(profile, index) in profiles" :key="index">
+                  <tr>
+                    <td x-text="profile.Rank"></td>
+                    <td x-text="profile.Name"></td>
+                    <td x-text="profile['Win Percentage']"></td>
+                    <td x-text="profile['Average Score']"></td>
+                    <td x-text="profile['Total Matches']"></td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </figure>
         </div>
       </section>
     </main>
 
     <footer>
       <div class="x-limit text-right">
-        <p>Axe Champs</p>
-        <h2>Star League</h2>
+        <hgroup>
+          <p>Axe Champs</p>
+          <h2>Star League</h2>
+        </hgroup>
       </div>
     </footer>
   </body>
