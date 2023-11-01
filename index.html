@@ -52,8 +52,6 @@
 
       footer {
         padding: 4rem 1rem 2rem 1rem;
-        color: var(--light);
-        background: var(--dark);
       }
 
       hgroup {
@@ -112,6 +110,11 @@
         margin: 0 auto;
       }
 
+      .bg-dark {
+        color: var(--light);
+        background: var(--dark);
+      }
+
       .text-center { text-align: center; }
       .text-right { text-align: right; }
     </style>
@@ -128,16 +131,13 @@
     </script>
   </head>
   <body x-data="{ profiles: [] }" x-init="profiles = await getProfiles()">
-    <header>
-      <div class="x-limit">
-        <hgroup>
-          <p>Axe Champs</p>
-          <h1>Star League</h1>
-        </hgroup>
-      </div>
-    </header>
-
     <main>
+      <section class="bg-dark">
+        <div class="x-limit">
+          <img src="/nstl-small.jpeg">
+        </div>
+      </section>
+
       <section>
         <div class="x-limit">
           <h2>Leaderboard</h2>
@@ -170,11 +170,11 @@
       </section>
     </main>
 
-    <footer>
+    <footer class="bg-dark">
       <div class="x-limit text-right">
         <hgroup>
-          <p>Axe Champs</p>
-          <h2>Star League</h2>
+          <p>National Star Throwing League</p>
+          <h2>NSTL</h2>
         </hgroup>
       </div>
     </footer>
