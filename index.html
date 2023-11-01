@@ -122,6 +122,13 @@
       .text-center { text-align: center; }
       .text-right { text-align: right; }
 
+      .logo {
+        display: block;
+        margin: 1rem auto;
+        width: 10rem;
+        height: auto;
+      }
+
       .grid {
         display: grid;
         gap: 1rem;
@@ -132,17 +139,18 @@
       }
 
       .grid.columns-auto-fill { grid-template-columns: auto 1fr; }
-
-      .grid.items-x-center { justify-items: center; }
       .grid.items-y-center { align-items: center; }
 
-      .grid.sub {
-        grid-template-columns: subgrid;
-        grid-column: 1 / -1;
-        justify-items: inherit;
-        align-items: inherit;
-        justify-content: inherit;
-        align-content: inherit;
+      @media screen and (max-width: 600px) {
+        .grid.stack {
+          display: block;
+        }
+      }
+
+      @media screen and (min-width: 601px) {
+        .grid > * {
+          margin: 0 !important;
+        }
       }
     </style>
     <script src="https://unpkg.com/alpinejs" defer></script>
@@ -160,8 +168,8 @@
   <body x-data="{ profiles: [] }" x-init="profiles = await getProfiles()">
     <main>
       <section class="bg-black">
-        <div class="x-limit grid columns-auto-fill items-y-center">
-          <img src="/nstl-small.jpeg">
+        <div class="x-limit grid stack columns-auto-fill items-y-center">
+          <img class="logo" src="/nstl-small.jpeg">
           <h1 class="text-center">National Star Throwing League</h1>
         </div>
       </section>
