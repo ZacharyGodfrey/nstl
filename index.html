@@ -115,13 +115,17 @@
         background: var(--dark);
       }
 
+      .bg-black {
+        color: var(--light);
+        background: black;
+      }
+
       .text-center { text-align: center; }
       .text-right { text-align: right; }
 
       .grid {
         display: grid;
-        column-gap: var(--gutter);
-        row-gap: var(--gutter);
+        gap: 1rem;
         justify-items: stretch; /* cell content X */
         align-items: start; /* cell content Y */
         justify-content: stretch; /* column spacing X */
@@ -156,7 +160,7 @@
   </head>
   <body x-data="{ profiles: [] }" x-init="profiles = await getProfiles()">
     <main>
-      <section class="bg-dark">
+      <section class="bg-black">
         <div class="x-limit grid columns-auto-fill items-y-center">
           <img src="/nstl-small.jpeg">
           <h1>National Star Throwing League</h1>
