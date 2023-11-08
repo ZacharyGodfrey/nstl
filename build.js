@@ -4,8 +4,8 @@ const { render } = require('mustache');
 
 const config = require('./config');
 
-const CLIENT_DIR = path.resolve(__dirname, '../client');
-const DIST_DIR = path.resolve(__dirname, '../dist');
+const CLIENT_DIR = path.resolve(__dirname, './client');
+const DIST_DIR = path.resolve(__dirname, './dist');
 
 const readFile = (filePath, encoding = 'utf-8') => fs.readFileSync(filePath, { encoding });
 const writeFile = (filePath, content) => fs.outputFileSync(filePath, content, 'utf-8');
