@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="National Star Throwing League">
     <meta name="format-detection" content="telephone=no">
-    <link rel="shortcut icon" type="image/ico" href="/star.ico">
+    <link rel="shortcut icon" type="image/ico" href="data:image/ico;base64,/*favicon*/">
     <title>NSTL &bull; National Star Throwing League</title>
     <style>
       * {
@@ -159,13 +159,17 @@
     </style>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script>
-      const getProfiles = async () => {
-        const docId = '10m2s8m3kyIc2GPB87y9hhoVHTBqUsmZwiy0OxuyIGoQ';
-        const sheetName = 'Leaderboard';
-        const dataUrl = `https://sheets-api.netlify.app/${docId}/${sheetName}`;
-        const { data: profiles } = await fetch(dataUrl).then((x) => x.json());
+      const config = {{{configJson}}};
 
-        return profiles;
+      const getData = async () => {
+        const promises = config.seasons.map(async ({ title, docId, sheetName }) => {
+          const dataUrl = `https://sheets-api.netlify.app/${docId}/${sheetName}`;
+          const { data: profiles } = await fetch(dataUrl).then((x) => x.json());
+
+          return { title, profiles };
+        });
+
+        return Promise.all(promises);
       };
     </script>
   </head>
@@ -173,42 +177,44 @@
     <main>
       <section class="bg-black">
         <div class="x-limit grid stack columns-auto-fill items-y-center">
-          <img class="logo" src="/nstl-small.jpeg">
+          <img class="logo" src="data:image/jpeg;base64,/*logo*/">
           <h1 class="text-center">National Star Throwing League</h1>
         </div>
       </section>
 
-      <section>
-        <div class="x-limit">
-          <h2>Leaderboard</h2>
+      <template x-for="(season, si) in seasons" :key="si">
+        <section>
+          <div class="x-limit">
+            <h2 x-text="season.title"></h2>
 
-          <figure>
-            <table class="text-center">
-              <thead class="bg-black">
-                <tr>
-                  <th>Rank</th>
-                  <th>Name</th>
-                  <th>Win Percentage</th>
-                  <th>Average Score</th>
-                  <th>Matches Played</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <template x-for="(profile, index) in profiles" :key="index">
+            <figure>
+              <table class="text-center">
+                <thead class="bg-black">
                   <tr>
-                    <td x-text="profile.Rank"></td>
-                    <td x-text="profile.Name"></td>
-                    <td x-text="profile['Win Percentage']"></td>
-                    <td x-text="profile['Average Score']"></td>
-                    <td x-text="profile['Total Matches']"></td>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Win Percentage</th>
+                    <th>Average Score</th>
+                    <th>Matches Played</th>
                   </tr>
-                </template>
-              </tbody>
-            </table>
-          </figure>
-        </div>
-      </section>
+                </thead>
+
+                <tbody>
+                  <template x-for="(profile, pi) in season.profiles" :key="pi">
+                    <tr>
+                      <td x-text="profile.Rank"></td>
+                      <td x-text="profile.Name"></td>
+                      <td x-text="profile['Win Percentage']"></td>
+                      <td x-text="profile['Average Score']"></td>
+                      <td x-text="profile['Total Matches']"></td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </figure>
+          </div>
+        </section>
+      </template>
     </main>
 
     <footer class="bg-black">
